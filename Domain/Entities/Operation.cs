@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace CleanArchitecture.Domain
 {
-    internal class Operation: BaseEntity
+    public class Operation: BaseEntity
     {
         public OperationType Type { get; set; }
         public string Name { get; set; }

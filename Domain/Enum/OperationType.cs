@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace CleanArchitecture.Domain
 {
-    internal enum OperationType
+    public enum OperationType
     {
         regular,
         once
