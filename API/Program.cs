@@ -1,5 +1,4 @@
-﻿using Microsoft.AspNetCore;
-namespace CleanArchitecture
+﻿namespace CleanArchitecture
 {
     public class Program
     {

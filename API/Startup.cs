@@ -23,14 +23,7 @@ namespace CleanArchitecture
                 c.SwaggerDoc("v1", new OpenApiInfo { Title = "Clean Architecture Api", Version = "v1" });
             });
 
-            // Register MediatR services
             services.AddMediatR(cfg => cfg.RegisterServicesFromAssembly(typeof(Startup).Assembly));
-
-            // Way-2
-            //services.AddMediatR(Assembly.GetExecutingAssembly());
-
-            // Register from multiple assembly.
-            //services.AddMediatR(Assembly.GetExecutingAssembly(), typeof(ICustomerService).Assembly);
         }
 
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
