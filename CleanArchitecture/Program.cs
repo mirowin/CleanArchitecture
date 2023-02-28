@@ -1,5 +1,5 @@
 ﻿using Microsoft.AspNetCore;
-namespace CleanArchitecture
+namespace ExpenceCalculator
 {
     public class Program
     {

@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace CleanArchitecture.Domain.DTO
+namespace ExpenceCalculator.Domain.DTO
 {
     public class CreateOperationModel
     {

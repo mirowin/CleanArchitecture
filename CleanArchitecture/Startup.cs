@@ -1,8 +1,11 @@
-﻿using CleanArchitecture.Infrastructure;
-using CleanArchitecture.Application.Interfaces;
+﻿using ExpenceCalculator.Infrastructure;
+using ExpenceCalculator.Application.Interfaces;
 using Microsoft.OpenApi.Models;
+using System.Reflection;
+using ExpenceCalculator.Domain;
+using Microsoft.EntityFrameworkCore;
 
-namespace CleanArchitecture
+namespace ExpenceCalculator
 {
     public class Startup
     {
@@ -15,7 +18,9 @@ namespace CleanArchitecture
 
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddSingleton(typeof(IOperationRepository<>), typeof(Repository<>));
+            services.AddSingleton<IUnitOfWork, UnitOfWork>();
+
+            services.AddDbContext<ApplicationContext>(o => o.UseInMemoryDatabase("DataBase"));
 
             services.AddControllers();
             services.AddSwaggerGen(c =>
@@ -25,6 +30,7 @@ namespace CleanArchitecture
 
             // Register MediatR services
             services.AddMediatR(cfg => cfg.RegisterServicesFromAssembly(typeof(Startup).Assembly));
+            services.AddMediatR(cfg => cfg.RegisterServicesFromAssembly(Assembly.GetAssembly(typeof(BaseEntity))));
 
             // Way-2
             //services.AddMediatR(Assembly.GetExecutingAssembly());

@@ -1,16 +1,10 @@
-﻿using CleanArchitecture.Application.Command;
-using CleanArchitecture.Application.Queries;
-using CleanArchitecture.Domain;
-using CleanArchitecture.Domain.DTO;
+﻿using ExpenceCalculator.Application.Command;
+using ExpenceCalculator.Application.Queries;
+using ExpenceCalculator.Domain.DTO;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
-namespace CleanArchitecture.Controllers
+namespace ExpenceCalculator.Controllers
 {
     [ApiController]
     [Route("api")]

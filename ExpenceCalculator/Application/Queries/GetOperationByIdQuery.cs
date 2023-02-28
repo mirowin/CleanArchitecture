@@ -1,8 +1,9 @@
-﻿using CleanArchitecture.Application.Interfaces;
-using CleanArchitecture.Domain;
+﻿using ExpenceCalculator.Application.Interfaces;
+using ExpenceCalculator.Domain;
+using ExpenceCalculator.Domain.Entities;
 using MediatR;
 
-namespace CleanArchitecture.Application.Queries
+namespace ExpenceCalculator.Application.Queries
 {
     public class GetOperationByIdQuery : IRequest<Operation>
     {
@@ -11,16 +12,16 @@ namespace CleanArchitecture.Application.Queries
 
     public class GetOperationByIdQueryHandler : IRequestHandler<GetOperationByIdQuery, Operation>
     {
-        private readonly IOperationRepository<Operation> _repository;
+        private readonly IUnitOfWork unitOfWork;
 
-        public GetOperationByIdQueryHandler(IOperationRepository<Operation> repository)
+        public GetOperationByIdQueryHandler(IUnitOfWork uow)
         {
-            _repository = repository;
+            unitOfWork = uow;
         }
 
         public async Task<Operation> Handle(GetOperationByIdQuery request, CancellationToken cancellationToken)
         {
-            return _repository.GetOperation(request.Id);
+            return unitOfWork.OperationRepository.Get(request.Id);
         }
     }
 }
