@@ -1,16 +1,16 @@
 ﻿using ExpenceCalculator.Application.Interfaces;
-using ExpenceCalculator.Domain;
+using ExpenceCalculator.Domain.DTO;
 using ExpenceCalculator.Domain.Entities;
 using MediatR;
 
 namespace ExpenceCalculator.Application.Queries
 {
-    public class GetOperationByIdQuery : IRequest<Operation>
+    public class GetOperationByIdQuery : IRequest<OperationViewModel>
     {
         public int Id { get; set; }
     }
 
-    public class GetOperationByIdQueryHandler : IRequestHandler<GetOperationByIdQuery, Operation>
+    public class GetOperationByIdQueryHandler : IRequestHandler<GetOperationByIdQuery, OperationViewModel>
     {
         private readonly IUnitOfWork unitOfWork;
 
@@ -19,9 +19,19 @@ namespace ExpenceCalculator.Application.Queries
             unitOfWork = uow;
         }
 
-        public async Task<Operation> Handle(GetOperationByIdQuery request, CancellationToken cancellationToken)
+        public async Task<OperationViewModel> Handle(GetOperationByIdQuery request, CancellationToken cancellationToken)
         {
-            return unitOfWork.OperationRepository.Get(request.Id);
+            var operation = unitOfWork.OperationRepository.Get(request.Id);
+
+            var viewModel = new OperationViewModel()
+            {
+                Name = operation.Name,
+                Value = operation.Value,
+                Type = operation.Type,
+                OperationDates = operation.OperationDates.Select(d => new OperationDateViewModel() { Date = d.Date }),
+                Categories = operation.Categories.Select(o => new CategoryViewModel() { Name = o.Name })
+            };
+            return viewModel;
         }
     }
 }

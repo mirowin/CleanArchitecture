@@ -1,5 +1,7 @@
 ﻿using ExpenceCalculator.Application.Interfaces;
+using ExpenceCalculator.Domain;
 using ExpenceCalculator.Domain.Entities;
+using ExpenceCalculator.Infrastructure.Repository;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
@@ -15,33 +17,32 @@ namespace ExpenceCalculator.Infrastructure
 
         private DbContext context;
         private IRepository<Operation> operationRepository;
-        private IRepository<OperationGroup> operationGroupRepository;
 
-        public IRepository<Operation> OperationRepository { get
+        public IRepository<Operation> OperationRepository
+        {
+            get
             {
                 if (operationRepository == null)
                 {
-                    operationRepository = new Repository<Operation>(context);
+                    operationRepository = new OperationRepository(context);
                 }
-
                 return operationRepository;
-            } 
-        }
-
-        public IRepository<OperationGroup> OperationGroupRepository { get
-            {
-                if (operationGroupRepository == null)
-                {
-                    operationGroupRepository = new Repository<OperationGroup>(context);
-                }
-
-                return operationGroupRepository;
-            } 
+            }
         }
 
         public UnitOfWork(ApplicationContext context) 
         { 
             this.context = context;
+        } 
+
+        public IRepository<T> GetRepository<T>() where T : BaseEntity
+        {
+            return new BaseGenericRepository<T>(context);
+        }
+
+        public void Save()
+        {
+            context.SaveChanges();
         }
 
         protected virtual void Dispose(bool disposing)

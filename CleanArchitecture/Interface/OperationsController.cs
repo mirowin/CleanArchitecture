@@ -41,7 +41,16 @@ namespace ExpenceCalculator.Controllers
                 Operation = model
             });
 
-            return Ok(result);
+            var viewModel = new OperationViewModel()
+            {
+                Name = model.Name,
+                Value = model.Value,
+                Type = model.Type,
+                Categories = model.OperationGroup,
+                OperationDates = model.OperationTime
+            };
+
+            return Ok(viewModel);
         }
     }
 }

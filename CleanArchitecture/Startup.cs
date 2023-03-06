@@ -18,9 +18,11 @@ namespace ExpenceCalculator
 
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddSingleton<IUnitOfWork, UnitOfWork>();
+            services.AddScoped<IUnitOfWork, UnitOfWork>();
 
-            services.AddDbContext<ApplicationContext>(o => o.UseInMemoryDatabase("DataBase"));
+            //services.AddDbContext<ApplicationContext>(o => o.UseInMemoryDatabase("DataBase"));
+            services.AddDbContext<ApplicationContext>(options =>
+                options.UseSqlServer("Server=(localdb)\\mssqllocaldb;Database=CleanArch;Trusted_Connection=True;"));
 
             services.AddControllers();
             services.AddSwaggerGen(c =>
@@ -31,12 +33,6 @@ namespace ExpenceCalculator
             // Register MediatR services
             services.AddMediatR(cfg => cfg.RegisterServicesFromAssembly(typeof(Startup).Assembly));
             services.AddMediatR(cfg => cfg.RegisterServicesFromAssembly(Assembly.GetAssembly(typeof(BaseEntity))));
-
-            // Way-2
-            //services.AddMediatR(Assembly.GetExecutingAssembly());
-
-            // Register from multiple assembly.
-            //services.AddMediatR(Assembly.GetExecutingAssembly(), typeof(ICustomerService).Assembly);
         }
 
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)

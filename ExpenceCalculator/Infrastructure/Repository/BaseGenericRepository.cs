@@ -1,8 +1,5 @@
 ﻿using ExpenceCalculator.Application.Interfaces;
-using ExpenceCalculator.Application.Queries;
 using ExpenceCalculator.Domain;
-using ExpenceCalculator.Domain.DTO;
-using ExpenceCalculator.Domain.Entities;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
@@ -10,20 +7,20 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace ExpenceCalculator.Infrastructure
+namespace ExpenceCalculator.Infrastructure.Repository
 {
-    public class Repository<T> : IRepository<T> where T : BaseEntity
+    public class BaseGenericRepository<T> : IRepository<T> where T : BaseEntity
     {
         private DbContext context;
         private DbSet<T> dbSet;
 
-        public Repository(DbContext dbContext)
+        public BaseGenericRepository(DbContext dbContext)
         {
             this.context = dbContext;
             this.dbSet = context.Set<T>();
         }
 
-        public void Delete(int id)
+        public virtual void Delete(int id)
         {
             var entity = dbSet.Find(id);
             if (entity != null)
@@ -32,7 +29,7 @@ namespace ExpenceCalculator.Infrastructure
             }
         }
 
-        public void Delete(T entity)
+        public virtual void Delete(T entity)
         {
             if (context.Entry(entity).State == EntityState.Detached)
             {
@@ -42,24 +39,35 @@ namespace ExpenceCalculator.Infrastructure
             dbSet.Remove(entity);
         }
 
-        public T Get(int id)
+        public virtual T Get(int id)
         {
             return dbSet.Find(id);
         }
 
-        public IEnumerable<T> Get(GetOperationsQuery query)
+        public virtual IEnumerable<T> GetMany()
         {
+            dbSet.Load();
             return dbSet;
         }
 
-        public void Insert(T entity)
+        public virtual IEnumerable<T> GetMany(Func<T, bool> predicate)
+        {
+            return dbSet.Where(predicate);
+        }
+
+        public virtual void Insert(T entity)
         {
             dbSet.Add(entity);
         }
 
-        public void Update(T entity)
+        public virtual void Update(T entity)
         {
             dbSet.Update(entity);
+        }
+
+        public virtual T Get(Func<T, bool> predicate)
+        {
+            return dbSet.FirstOrDefault(predicate);
         }
     }
 }
